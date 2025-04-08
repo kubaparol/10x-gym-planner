@@ -1,26 +1,52 @@
-# 10x Astro Starter
+# 10x Gym Planner
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+A modern web application that helps users efficiently manage workout plans and track their training progress. The application's standout feature is the ability to convert workout plans from PDF format to an interactive format using artificial intelligence, making it easier to use plans during workouts and monitor progress.
+
+## Project Description
+
+10x Gym Planner solves the common problem of trainers providing workout plans in PDF format, which makes it difficult for clients (especially beginners) to effectively use these plans and track their progress. The application allows users to:
+
+- Convert PDF workout plans to interactive format using AI
+- Manually create and manage workout plans
+- Track progress for each exercise (weights and repetitions)
+- View training history and progress over time
+- Access a mobile-friendly interface designed for gym use
 
 ## Tech Stack
 
+### Frontend
 - [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
 - [React](https://react.dev/) v19.0.0 - UI library for building interactive components
 - [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
 - [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+- [Shadcn/ui](https://ui.shadcn.com/) - Accessible React component library
 
-## Prerequisites
+### Backend
+- [Supabase](https://supabase.com/) - Backend-as-a-Service solution providing:
+  - PostgreSQL database
+  - Authentication system
+  - SDK for multiple languages
 
+### AI
+- [Openrouter.ai](https://openrouter.ai/) - Access to various AI models for PDF conversion
+
+### Infrastructure
+- [GitHub Actions](https://github.com/features/actions) - CI/CD pipelines
+- [DigitalOcean](https://www.digitalocean.com/) - Hosting via Docker
+
+## Getting Started Locally
+
+### Prerequisites
 - Node.js v22.14.0 (as specified in `.nvmrc`)
 - npm (comes with Node.js)
 
-## Getting Started
+### Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
+git clone https://github.com/kubaparol/10x-gym-planner.git
+cd 10x-gym-planner
 ```
 
 2. Install dependencies:
@@ -48,46 +74,39 @@ npm run build
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint issues
+- `npm run format` - Format code with Prettier
 
-## Project Structure
+## Project Scope
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+### MVP Features
+- User account system with profile management
+- Manual workout plan creation
+- PDF to interactive format conversion using AI
+- Basic workout plan browsing (no filtering, sorting, or searching)
+- Progress tracking for exercises
+- Training history viewing
+- Mobile-friendly UI optimized for gym use
 
-## AI Development Support
+### Out of Scope for MVP
+- Import formats other than PDF
+- Mobile applications (web-only initially)
+- Social features
+- Paid plans (all features free initially)
+- Filtering, sorting, and searching workout plans
+- Modifying plans after adding them to the system
+- Exercise descriptions, photos, or instructional videos
+- Automatic weight progression suggestions
+- Export of training data
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+## Project Status
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+The project is currently in active development, focusing on implementing the MVP features. We are tracking success metrics including:
 
-### Cursor IDE
-
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
-
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+- User adoption (75% target for users adding plans weekly)
+- PDF conversion success rate (75% target)
+- User retention rates
+- Average number of workouts per user weekly
+- Average time spent in the application during workouts
 
 ## License
 
