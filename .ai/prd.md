@@ -1,8 +1,8 @@
-# Dokument wymagań produktu (PRD) - Gymzy
+# Dokument wymagań produktu (PRD)
 
 ## 1. Przegląd produktu
 
-Gymzy to webowa aplikacja umożliwiająca użytkownikom efektywne zarządzanie planami treningowymi oraz śledzenie postępów treningowych. Głównym wyróżnikiem aplikacji jest możliwość konwersji planów treningowych z formatu PDF do formatu interaktywnego przy pomocy sztucznej inteligencji, co znacząco ułatwia korzystanie z planów podczas treningu oraz monitorowanie postępów.
+Gym Planner to webowa aplikacja umożliwiająca użytkownikom efektywne zarządzanie planami treningowymi oraz śledzenie postępów treningowych. Głównym wyróżnikiem aplikacji jest możliwość konwersji planów treningowych z formatu PDF do formatu interaktywnego przy pomocy sztucznej inteligencji, co znacząco ułatwia korzystanie z planów podczas treningu oraz monitorowanie postępów.
 
 Aplikacja w wersji MVP skupia się na podstawowych funkcjonalnościach, które rozwiązują kluczowy problem użytkowników - trudności w praktycznym wykorzystaniu planów treningowych udostępnianych w formacie PDF.
 
