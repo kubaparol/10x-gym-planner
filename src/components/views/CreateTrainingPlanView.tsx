@@ -30,9 +30,9 @@ export interface ExerciseFormViewModel {
   id: string;
   exercise_name: string;
   order_index: number;
-  sets: string;
-  repetitions: string;
-  rest_time_seconds: string;
+  sets: number;
+  repetitions: number;
+  rest_time_seconds: number;
 }
 
 // Schema type that matches the form view model
@@ -51,18 +51,21 @@ const createTrainingPlanFormSchema = z.object({
               id: z.string(),
               exercise_name: z.string().min(1, "Exercise name is required"),
               order_index: z.number(),
-              sets: z.string().refine((val) => {
-                const num = parseInt(val, 10);
-                return !isNaN(num) && num > 0 && num <= 100;
-              }, "Sets must be a number between 1 and 100"),
-              repetitions: z.string().refine((val) => {
-                const num = parseInt(val, 10);
-                return !isNaN(num) && num > 0 && num <= 1000;
-              }, "Repetitions must be a number between 1 and 1000"),
-              rest_time_seconds: z.string().refine((val) => {
-                const num = parseInt(val, 10);
-                return !isNaN(num) && num > 0 && num <= 600;
-              }, "Rest time must be between 1 and 600 seconds"),
+              sets: z.coerce
+                .number()
+                .min(1, "Sets must be at least 1")
+                .max(100, "Sets must be at most 100")
+                .int("Sets must be a whole number"),
+              repetitions: z.coerce
+                .number()
+                .min(1, "Repetitions must be at least 1")
+                .max(1000, "Repetitions must be at most 1000")
+                .int("Repetitions must be a whole number"),
+              rest_time_seconds: z.coerce
+                .number()
+                .min(1, "Rest time must be at least 1 second")
+                .max(600, "Rest time must be at most 600 seconds")
+                .int("Rest time must be a whole number"),
             })
           )
           .min(1, "At least one exercise is required"),
@@ -86,9 +89,54 @@ export function CreateTrainingPlanView() {
     resolver: zodResolver(createTrainingPlanFormSchema),
     defaultValues: {
       id: uuidv4(),
-      name: "",
-      description: "",
-      training_days: [],
+      name: "Name",
+      description: "Description",
+      training_days: [
+        {
+          id: uuidv4(),
+          weekday: 1, // Monday
+          exercises: [
+            {
+              id: uuidv4(),
+              exercise_name: "Bench Press",
+              order_index: 1,
+              sets: 3,
+              repetitions: 12,
+              rest_time_seconds: 60,
+            },
+            {
+              id: uuidv4(),
+              exercise_name: "Squat",
+              order_index: 2,
+              sets: 4,
+              repetitions: 10,
+              rest_time_seconds: 90,
+            },
+          ],
+        },
+        {
+          id: uuidv4(),
+          weekday: 3, // Wednesday
+          exercises: [
+            {
+              id: uuidv4(),
+              exercise_name: "Deadlift",
+              order_index: 1,
+              sets: 3,
+              repetitions: 8,
+              rest_time_seconds: 120,
+            },
+            {
+              id: uuidv4(),
+              exercise_name: "Pull-ups",
+              order_index: 2,
+              sets: 4,
+              repetitions: 12,
+              rest_time_seconds: 60,
+            },
+          ],
+        },
+      ],
     },
   });
 
@@ -106,9 +154,9 @@ export function CreateTrainingPlanView() {
           id: uuidv4(),
           exercise_name: exercise.exercise_name,
           order_index: exercise.order_index,
-          sets: exercise.sets.toString(),
-          repetitions: exercise.repetitions.toString(),
-          rest_time_seconds: exercise.rest_time_seconds.toString(),
+          sets: exercise.sets,
+          repetitions: exercise.repetitions,
+          rest_time_seconds: exercise.rest_time_seconds,
         })),
       })),
     };
@@ -128,6 +176,7 @@ export function CreateTrainingPlanView() {
 
   const handleSave = async () => {
     const isValid = await form.trigger();
+
     if (!isValid) {
       toast.error("Validation Error", {
         description: "Please fix the form errors before saving.",
@@ -155,14 +204,13 @@ export function CreateTrainingPlanView() {
         description: formData.description,
         source: formData.source,
         training_days: formData.training_days.map((day) => ({
-          // We can safely assert non-null here because we validated above
           weekday: day.weekday as number,
           exercises: day.exercises.map((exercise) => ({
             exercise_name: exercise.exercise_name,
             order_index: exercise.order_index,
-            sets: parseInt(exercise.sets, 10),
-            repetitions: parseInt(exercise.repetitions, 10),
-            rest_time_seconds: parseInt(exercise.rest_time_seconds, 10),
+            sets: exercise.sets,
+            repetitions: exercise.repetitions,
+            rest_time_seconds: exercise.rest_time_seconds,
           })),
         })),
       };
@@ -180,7 +228,6 @@ export function CreateTrainingPlanView() {
       }
 
       toast.success("Training plan saved successfully");
-      window.location.href = "/training-plans";
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
       toast.error("Error", {
@@ -210,7 +257,7 @@ export function CreateTrainingPlanView() {
       <div className="flex justify-end">
         <button
           onClick={handleSave}
-          disabled={isLoading || isSaving || !form.formState.isValid}
+          disabled={isLoading || isSaving}
           className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
         >
           {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />}
