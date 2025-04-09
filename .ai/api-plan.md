@@ -76,20 +76,34 @@
 
   - **Method:** POST
   - **URL:** `/training-plans`
-  - **Description:** Create a new training plan.
+  - **Description:** Create a new complete training plan with training days and exercises.
   - **Request JSON:**
     ```json
     {
       "name": "string",
       "description": "string",
-      "is_active": "boolean (optional)"
+      "training_days": [
+        {
+          "weekday": "number (0-6)",
+          "exercises": [
+            {
+              "exercise_name": "string",
+              "order_index": "number",
+              "sets": "number",
+              "repetitions": "number",
+              "rest_time_seconds": "number"
+            }
+          ]
+        }
+      ],
+      "source": "manual | pdf_import"
     }
     ```
   - **Response JSON:**
     ```json
     {
       "id": "UUID",
-      "message": "Training plan created successfully"
+      "message": "Training plan created successfully with all exercises"
     }
     ```
   - **Success Codes:** 201
@@ -432,20 +446,36 @@
 
 ### PDF Conversion Endpoints
 
-- **Upload PDF for Conversion**
+- **Convert PDF to Training Plan**
 
   - **Method:** POST
-  - **URL:** `/training-plans/pdf-import`
-  - **Description:** Upload a PDF file to convert it into a training plan structure.
-  - **Request:** Multipart/form-data (with file field such as `pdf_file`)
+  - **URL:** `/training-plans/pdf/convert`
+  - **Description:** Convert a PDF file into a training plan structure without saving it to the database.
+  - **Request:** Multipart/form-data (with file field `file`)
   - **Response JSON:**
     ```json
     {
-      "import_id": "UUID",
-      "message": "PDF file uploaded successfully. Conversion in progress."
+      "plan": {
+        "name": "string",
+        "description": "string",
+        "training_days": [
+          {
+            "weekday": "number (0-6)",
+            "exercises": [
+              {
+                "exercise_name": "string",
+                "order_index": "number",
+                "sets": "number",
+                "repetitions": "number",
+                "rest_time_seconds": "number"
+              }
+            ]
+          }
+        ]
+      }
     }
     ```
-  - **Success Codes:** 202
+  - **Success Codes:** 200
   - **Error Codes:** 400, 401
 
 - **Get PDF Conversion Candidate**
