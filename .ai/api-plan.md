@@ -38,7 +38,7 @@
 
 - **PDF Import** (Business process, no dedicated table):
   - Handles the conversion of PDF workout plans into a structured training plan.
-  - Endpoints will support uploading PDF files.
+  - Endpoints will support uploading PDF files and handling candidate conversion results.
 
 ## 2. Endpoints
 
@@ -463,6 +463,33 @@
     ```
   - **Success Codes:** 200
   - **Error Codes:** 401, 404
+
+- **Approve PDF Conversion**
+
+  - **Method:** POST
+  - **URL:** `/training-plans/pdf-import/{import_id}/approve`
+  - **Description:** Approve the candidate conversion to create a new training plan.
+  - **Response JSON:**
+    ```json
+    {
+      "message": "PDF conversion approved; training plan created successfully"
+    }
+    ```
+  - **Success Codes:** 200
+  - **Error Codes:** 400, 401, 404
+
+- **Reject PDF Conversion**
+  - **Method:** POST
+  - **URL:** `/training-plans/pdf-import/{import_id}/reject`
+  - **Description:** Reject the candidate conversion.
+  - **Response JSON:**
+    ```json
+    {
+      "message": "PDF conversion rejected"
+    }
+    ```
+  - **Success Codes:** 200
+  - **Error Codes:** 400, 401, 404
 
 ## 3. Authentication and Authorization
 
