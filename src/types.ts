@@ -70,6 +70,7 @@ export interface TrainingDayDTO {
 // Command to create a new training day
 export interface CreateTrainingDayCommand {
   weekday: number;
+  exercises: CreateTrainingDayExerciseCommand[];
 }
 
 export interface CreateTrainingDayResponseDTO {
@@ -224,4 +225,31 @@ export interface PDFConversionCandidateDTO {
   import_id: UUID;
   candidate_plan: TrainingPlanDetailsDTO | Record<string, unknown>;
   status: "pending" | "reviewed";
+}
+
+// -------------------------------
+// Complete Training Plan Creation
+// -------------------------------
+
+export interface CreateTrainingDayExerciseCommand {
+  exercise_name: string;
+  order_index: number;
+  sets: number;
+  repetitions: number;
+  rest_time_seconds: number;
+}
+
+export interface CreateCompleteTrainingPlanCommand {
+  name: string;
+  description: string;
+  training_days: CreateTrainingDayCommand[];
+  source?: "manual" | "pdf_import";
+}
+
+// -------------------------------
+// PDF Import Types
+// -------------------------------
+
+export interface PdfTrainingPlanImportResponseDTO {
+  plan: CreateCompleteTrainingPlanCommand;
 }
