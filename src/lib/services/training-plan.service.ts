@@ -1,6 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../../db/database.types";
-import type { CreateCompleteTrainingPlanCommand, CreateTrainingPlanResponseDTO } from "../../types";
+import type {
+  CreateCompleteTrainingPlanCommand,
+  CreateTrainingPlanResponseDTO,
+  TrainingPlanListDTO,
+  TrainingPlanListResponseDTO,
+  PaginationDTO,
+} from "../../types";
 
 export class TrainingPlanService {
   constructor(private readonly supabase: SupabaseClient<Database>) {}
@@ -128,5 +134,43 @@ export class TrainingPlanService {
     if (error) {
       throw new Error(`Failed to activate plan: ${error.message}`);
     }
+  }
+
+  async listPlans(userId: string, page = 1, limit = 10): Promise<TrainingPlanListResponseDTO> {
+    // Calculate offset
+    const offset = (page - 1) * limit;
+
+    // Get total count
+    const { count, error: countError } = await this.supabase
+      .from("training_plans")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
+
+    if (countError) {
+      throw new Error(`Failed to get total count: ${countError.message}`);
+    }
+
+    // Get paginated plans
+    const { data: plans, error: plansError } = await this.supabase
+      .from("training_plans")
+      .select("id, name, description, is_active, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (plansError) {
+      throw new Error(`Failed to fetch training plans: ${plansError.message}`);
+    }
+
+    const pagination: PaginationDTO = {
+      page,
+      limit,
+      total: count || 0,
+    };
+
+    return {
+      plans: (plans || []) as TrainingPlanListDTO[],
+      pagination,
+    };
   }
 }

@@ -29,6 +29,43 @@ const createCompleteTrainingPlanSchema = z.object({
   source: z.enum(["manual", "pdf_import"]).optional().default("manual"),
 });
 
+// Validation schema for query parameters
+const listQuerySchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(10),
+});
+
+export const GET: APIRoute = async ({ url, locals }) => {
+  try {
+    const searchParams = Object.fromEntries(url.searchParams);
+    const validationResult = listQuerySchema.safeParse(searchParams);
+
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid query parameters",
+          details: validationResult.error.errors,
+        }),
+        { status: 400 }
+      );
+    }
+
+    const { page, limit } = validationResult.data;
+    const trainingPlanService = new TrainingPlanService(locals.supabase);
+    const result = await trainingPlanService.listPlans(DEFAULT_USER_ID, page, limit);
+
+    return new Response(JSON.stringify(result), { status: 200 });
+  } catch (error) {
+    console.error("Error listing training plans:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+      }),
+      { status: 500 }
+    );
+  }
+};
+
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse and validate request body
