@@ -18,9 +18,27 @@ export class PdfImportService {
         throw new Error(`Failed to upload PDF: ${uploadResponse.error}`);
       }
 
-      const systemPrompt = `You are a professional fitness trainer assistant. Analyze the provided PDF training plan and extract its structure.`;
+      const systemPrompt = `You are a professional fitness trainer assistant specialized in analyzing training plan PDFs. Your task is to extract structured training plan data ONLY if the PDF contains a valid training plan with exercises, sets, and repetitions.
 
-      const userPrompt = `Please analyze the provided PDF file and extract the training plan data.`;
+IMPORTANT VALIDATION RULES:
+1. If the PDF contains a valid training plan:
+   - Set status to "ok"
+   - Fill in all required fields with extracted data
+2. If the PDF is invalid or doesn't contain a proper training plan:
+   - Set status to "error"
+3. Only extract data if you are 100% certain about the values
+4. Do not make assumptions or fill in missing data
+5. Each exercise must have clearly specified sets, repetitions and rest times`;
+
+      const userPrompt = `Analyze the provided PDF file and extract the training plan data following these rules:
+1. First, verify if this is actually a training plan document
+2. If it's not a valid training plan or required data is missing:
+   - Return response with status "error"
+3. If it is a valid training plan:
+   - Set status to "ok"
+   - Extract only information that is explicitly stated
+   - Ensure all exercises have complete data
+4. Never make assumptions about missing values`;
 
       const completion = await this.openAIService.chatCompletionWithFile<CreateCompleteTrainingPlanCommand>(
         uploadResponse.fileId,
@@ -33,6 +51,10 @@ export class PdfImportService {
             schema: {
               type: "object",
               properties: {
+                status: {
+                  type: "string",
+                  enum: ["ok", "error"],
+                },
                 name: { type: "string" },
                 description: { type: "string" },
                 training_days: {
@@ -64,7 +86,7 @@ export class PdfImportService {
                   },
                 },
               },
-              required: ["name", "description", "training_days"],
+              required: ["status", "name", "description", "training_days"],
               additionalProperties: false,
             },
           },
@@ -75,6 +97,10 @@ export class PdfImportService {
 
       if (!completion.parsedOutput) {
         throw new Error("Failed to parse training plan data from OpenAI response");
+      }
+
+      if ("error" in completion.parsedOutput) {
+        throw new Error(`Invalid training plan: ${completion.parsedOutput.error}`);
       }
 
       return completion.parsedOutput;
