@@ -26,11 +26,24 @@ Trenerzy personalni udostępniają plany treningowe w formacie PDF, co utrudnia 
 
 ### 3.2. Zarządzanie planami treningowymi
 
-- Dodawanie planów manualnie przez formularz
-- Konwersja planów z PDF przy pomocy AI
+- Dodawanie planów manualnie przez formularz z pełną strukturą:
+  - Nazwa i opis planu
+  - Lista dni treningowych z przypisanym dniem tygodnia (0-6)
+  - Lista ćwiczeń dla każdego dnia z parametrami:
+    - Nazwa ćwiczenia
+    - Kolejność wykonywania
+    - Liczba serii
+    - Liczba powtórzeń
+    - Czas odpoczynku w sekundach
+- Konwersja planów z PDF przy pomocy AI:
+  1. Przesłanie pliku PDF do konwersji
+  2. Otrzymanie propozycji struktury planu (taka sama jak przy tworzeniu manualnym)
+  3. Możliwość zapisania skonwertowanego planu w systemie
 - Przeglądanie planów treningowych w formie prostej listy (bez filtrowania, sortowania i wyszukiwania)
 - Usuwanie planów treningowych
 - Brak możliwości modyfikacji planów po ich dodaniu do systemu
+- Plan domyślnie jest nieaktywny (is_active=false)
+- Aktywacja planu możliwa tylko gdy zawiera minimum 1 dzień treningowy z minimum 1 ćwiczeniem
 
 ### 3.3. Struktura planu treningowego
 
@@ -119,11 +132,15 @@ Poniższe funkcjonalności NIE są częścią MVP:
 - Jako zalogowany użytkownik, chcę manualnie dodać plan treningowy, aby móc z niego korzystać podczas treningów.
 - Kryteria akceptacji:
   - Użytkownik może utworzyć nowy plan podając jego nazwę i opis
-  - Użytkownik może dodać tygodnie treningowe
-  - Dla każdego tygodnia użytkownik może dodać dni treningowe
-  - Dla każdego dnia użytkownik może dodać ćwiczenia
-  - Dla każdego ćwiczenia użytkownik może określić: nazwę, ilość serii, ilość powtórzeń, czas przerwy
-  - Użytkownik może zapisać plan
+  - Użytkownik może dodać dni treningowe z przypisaniem do dnia tygodnia (0-6)
+  - Dla każdego dnia użytkownik może dodać ćwiczenia z parametrami:
+    - Nazwa ćwiczenia
+    - Kolejność wykonywania
+    - Liczba serii
+    - Liczba powtórzeń
+    - Czas odpoczynku w sekundach
+  - System tworzy nowe ćwiczenia w bazie danych
+  - Plan jest domyślnie nieaktywny (is_active=false)
   - Po zapisaniu plan jest widoczny na liście planów użytkownika
 
 ### US-006: Konwersja planu treningowego z PDF
@@ -132,10 +149,14 @@ Poniższe funkcjonalności NIE są częścią MVP:
 - Kryteria akceptacji:
   - Użytkownik może przesłać plik PDF do systemu
   - System analizuje plik przy pomocy AI i ekstrahuje strukturę planu treningowego
-  - System prezentuje użytkownikowi wynik konwersji
-  - Użytkownik może zweryfikować i edytować wynik konwersji
-  - Użytkownik może zatwierdzić plan lub odrzucić konwersję
-  - Po zatwierdzeniu plan jest zapisywany i widoczny na liście planów użytkownika
+  - System prezentuje użytkownikowi wynik konwersji zawierający:
+    - Nazwę i opis planu
+    - Listę dni treningowych z przypisaniem do dni tygodnia
+    - Listę ćwiczeń dla każdego dnia z parametrami (nazwa, kolejność, serie, powtórzenia, odpoczynek)
+  - Użytkownik może zapisać skonwertowany plan w systemie
+  - System tworzy nowe ćwiczenia w bazie danych
+  - Plan jest domyślnie nieaktywny (is_active=false)
+  - Po zapisaniu plan jest widoczny na liście planów użytkownika z oznaczeniem źródła jako "pdf_import"
 
 ### US-007: Przeglądanie listy planów treningowych
 
