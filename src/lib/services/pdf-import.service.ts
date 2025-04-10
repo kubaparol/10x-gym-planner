@@ -1,53 +1,86 @@
 import type { CreateCompleteTrainingPlanCommand } from "../../types";
+import { OpenAIService } from "./openai.service";
 
 export class PdfImportService {
-  async convertPdfToPlan(file: File): Promise<CreateCompleteTrainingPlanCommand> {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+  private readonly openAIService: OpenAIService;
 
-    // Mock PDF processing - in reality this would use AI to extract data
-    return {
-      name: file.name.replace(".pdf", ""),
-      description: "Training plan extracted from PDF file",
-      training_days: [
+  constructor(openAIConfig?: { apiKey: string }) {
+    this.openAIService = new OpenAIService({
+      apiKey: openAIConfig?.apiKey,
+    });
+  }
+
+  async convertPdfToPlan(file: File): Promise<CreateCompleteTrainingPlanCommand> {
+    try {
+      // Step 1: Upload the PDF file to OpenAI
+      const uploadResponse = await this.openAIService.uploadFile(file);
+      if (uploadResponse.status === "error" || !uploadResponse.fileId) {
+        throw new Error(`Failed to upload PDF: ${uploadResponse.error}`);
+      }
+
+      const systemPrompt = `You are a professional fitness trainer assistant. Analyze the provided PDF training plan and extract its structure.`;
+
+      const userPrompt = `Please analyze the provided PDF file and extract the training plan data.`;
+
+      const completion = await this.openAIService.chatCompletionWithFile<CreateCompleteTrainingPlanCommand>(
+        uploadResponse.fileId,
+        systemPrompt,
+        userPrompt,
         {
-          weekday: 1, // Monday
-          exercises: [
-            {
-              exercise_name: "Bench Press",
-              order_index: 1,
-              sets: 3,
-              repetitions: 12,
-              rest_time_seconds: 60,
+          format: {
+            type: "json_schema",
+            name: "training_plan",
+            schema: {
+              type: "object",
+              properties: {
+                name: { type: "string" },
+                description: { type: "string" },
+                training_days: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      weekday: {
+                        type: "integer",
+                      },
+                      exercises: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            exercise_name: { type: "string" },
+                            order_index: { type: "integer" },
+                            sets: { type: "integer" },
+                            repetitions: { type: "integer" },
+                            rest_time_seconds: { type: "integer" },
+                          },
+                          required: ["exercise_name", "order_index", "sets", "repetitions", "rest_time_seconds"],
+                          additionalProperties: false,
+                        },
+                      },
+                    },
+                    required: ["weekday", "exercises"],
+                    additionalProperties: false,
+                  },
+                },
+              },
+              required: ["name", "description", "training_days"],
+              additionalProperties: false,
             },
-            {
-              exercise_name: "Squat",
-              order_index: 2,
-              sets: 4,
-              repetitions: 10,
-              rest_time_seconds: 90,
-            },
-          ],
-        },
-        {
-          weekday: 3, // Wednesday
-          exercises: [
-            {
-              exercise_name: "Deadlift",
-              order_index: 1,
-              sets: 3,
-              repetitions: 8,
-              rest_time_seconds: 120,
-            },
-            {
-              exercise_name: "Pull-ups",
-              order_index: 2,
-              sets: 4,
-              repetitions: 12,
-              rest_time_seconds: 60,
-            },
-          ],
-        },
-      ],
-    };
+          },
+        }
+      );
+
+      await this.openAIService.deleteFile(uploadResponse.fileId);
+
+      if (!completion.parsedOutput) {
+        throw new Error("Failed to parse training plan data from OpenAI response");
+      }
+
+      return completion.parsedOutput;
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error during processing";
+      throw new Error(`PDF processing failed: ${errorMessage}`);
+    }
   }
 }

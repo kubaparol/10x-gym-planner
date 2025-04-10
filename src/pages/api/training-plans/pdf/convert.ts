@@ -17,7 +17,9 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const pdfImportService = new PdfImportService();
+    const pdfImportService = new PdfImportService({
+      apiKey: import.meta.env.OPENAI_API_KEY,
+    });
     const plan = await pdfImportService.convertPdfToPlan(file);
 
     return new Response(JSON.stringify({ plan }), { status: 200 });
