@@ -89,54 +89,9 @@ export function CreateTrainingPlanView() {
     resolver: zodResolver(createTrainingPlanFormSchema),
     defaultValues: {
       id: uuidv4(),
-      name: "Name",
-      description: "Description",
-      training_days: [
-        {
-          id: uuidv4(),
-          weekday: 1, // Monday
-          exercises: [
-            {
-              id: uuidv4(),
-              exercise_name: "Bench Press",
-              order_index: 1,
-              sets: 3,
-              repetitions: 12,
-              rest_time_seconds: 60,
-            },
-            {
-              id: uuidv4(),
-              exercise_name: "Squat",
-              order_index: 2,
-              sets: 4,
-              repetitions: 10,
-              rest_time_seconds: 90,
-            },
-          ],
-        },
-        {
-          id: uuidv4(),
-          weekday: 3, // Wednesday
-          exercises: [
-            {
-              id: uuidv4(),
-              exercise_name: "Deadlift",
-              order_index: 1,
-              sets: 3,
-              repetitions: 8,
-              rest_time_seconds: 120,
-            },
-            {
-              id: uuidv4(),
-              exercise_name: "Pull-ups",
-              order_index: 2,
-              sets: 4,
-              repetitions: 12,
-              rest_time_seconds: 60,
-            },
-          ],
-        },
-      ],
+      name: "",
+      description: "",
+      training_days: [],
     },
   });
 
