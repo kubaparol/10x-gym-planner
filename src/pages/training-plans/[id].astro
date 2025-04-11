@@ -1,0 +1,13 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { TrainingPlanDetails } from "@/components/training-plans/TrainingPlanDetails";
+
+const { id } = Astro.params;
+if (!id) {
+  return Astro.redirect("/training-plans");
+}
+---
+
+<Layout title="Plan treningowy">
+  <TrainingPlanDetails client:load planId={id} />
+</Layout>
