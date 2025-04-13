@@ -246,4 +246,16 @@ export class TrainingPlanService {
       training_days,
     };
   }
+
+  async deletePlan(planId: string): Promise<void> {
+    // Delete the plan (cascade deletion will handle related records)
+    const { error } = await this.supabase.from("training_plans").delete().eq("id", planId);
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        throw new Error("Training plan not found");
+      }
+      throw new Error(`Failed to delete training plan: ${error.message}`);
+    }
+  }
 }
