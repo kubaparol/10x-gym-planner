@@ -10,8 +10,6 @@ interface Props {
 const { title = "10x Gym Planner" } = Astro.props;
 const isAuthPage = Astro.url.pathname.startsWith("/auth");
 
-console.log(Astro.locals.user);
-
 // Redirect authenticated users away from auth pages
 if (isAuthPage && Astro.locals.user) {
   return Astro.redirect("/dashboard");

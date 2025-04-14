@@ -32,11 +32,11 @@ export function Topbar() {
             10x Gym Planner
           </a>
           <nav className="flex items-center gap-4">
+            <a href="/create-training-plan" className="text-sm text-muted-foreground hover:text-foreground">
+              Create Plan
+            </a>
             <a href="/training-plans" className="text-sm text-muted-foreground hover:text-foreground">
               Training Plans
-            </a>
-            <a href="/exercises" className="text-sm text-muted-foreground hover:text-foreground">
-              Exercises
             </a>
           </nav>
         </div>
