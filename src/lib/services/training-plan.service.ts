@@ -6,6 +6,9 @@ import type {
   TrainingPlanListDTO,
   TrainingPlanListResponseDTO,
   PaginationDTO,
+  TrainingPlanDetailsDTO,
+  TrainingDayDTO,
+  TrainingDayExerciseDTO,
 } from "../../types";
 
 export class TrainingPlanService {
@@ -172,5 +175,87 @@ export class TrainingPlanService {
       plans: (plans || []) as TrainingPlanListDTO[],
       pagination,
     };
+  }
+
+  async getDetails(planId: string): Promise<TrainingPlanDetailsDTO> {
+    // Get the training plan
+    const { data: plan, error: planError } = await this.supabase
+      .from("training_plans")
+      .select("id, name, description, is_active")
+      .eq("id", planId)
+      .single();
+
+    if (planError || !plan) {
+      throw new Error(planError?.message || "Training plan not found");
+    }
+
+    // Get training days with exercises
+    const { data: days, error: daysError } = await this.supabase
+      .from("training_days")
+      .select(
+        `
+        id,
+        weekday,
+        created_at,
+        training_day_exercises (
+          id,
+          order_index,
+          sets,
+          repetitions,
+          rest_time_seconds,
+          exercise:exercises (
+            id,
+            name
+          )
+        )
+      `
+      )
+      .eq("plan_id", planId)
+      .order("weekday");
+
+    if (daysError) {
+      throw new Error(`Failed to fetch training days: ${daysError.message}`);
+    }
+
+    // Transform the data to match the DTO structure
+    const training_days: TrainingDayDTO[] = (days || []).map((day) => {
+      const exercises: TrainingDayExerciseDTO[] = (day.training_day_exercises || [])
+        .map((tde) => ({
+          id: tde.id,
+          exercise: tde.exercise,
+          order_index: tde.order_index,
+          sets: tde.sets,
+          repetitions: tde.repetitions,
+          rest_time_seconds: tde.rest_time_seconds,
+        }))
+        .sort((a, b) => a.order_index - b.order_index);
+
+      return {
+        id: day.id,
+        weekday: day.weekday,
+        created_at: day.created_at,
+        exercises,
+      };
+    });
+
+    return {
+      id: plan.id,
+      name: plan.name,
+      description: plan.description,
+      is_active: plan.is_active,
+      training_days,
+    };
+  }
+
+  async deletePlan(planId: string): Promise<void> {
+    // Delete the plan (cascade deletion will handle related records)
+    const { error } = await this.supabase.from("training_plans").delete().eq("id", planId);
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        throw new Error("Training plan not found");
+      }
+      throw new Error(`Failed to delete training plan: ${error.message}`);
+    }
   }
 }

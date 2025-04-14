@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { TrainingPlansPage } from "../components/training-plans/TrainingPlansPage";
+---
+
+<Layout title="Training Plans">
+  <main class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-8">Training Plans</h1>
+    <TrainingPlansPage client:load />
+  </main>
+</Layout>
