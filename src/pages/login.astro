@@ -1,0 +1,14 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { LoginForm } from "../components/auth/LoginForm";
+
+export const prerender = false;
+---
+
+<Layout title="Login - 10x Gym Planner">
+  <div class="min-h-screen">
+    <main class="container max-w-md mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
+      <LoginForm client:load />
+    </main>
+  </div>
+</Layout>
