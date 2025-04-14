@@ -13,9 +13,11 @@ export function LoginForm() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Invalid email or password");
+        toast.error(result.error || "Invalid email or password");
+        return; // Early return instead of throwing
       }
 
       toast.success("Login successful", {
@@ -25,7 +27,8 @@ export function LoginForm() {
       // Redirect to dashboard after successful login
       window.location.href = "/dashboard";
     } catch (error) {
-      throw error;
+      toast.error("An unexpected error occurred");
+      console.error(error); // Log error for debugging
     }
   };
 
@@ -54,12 +57,12 @@ export function LoginForm() {
         <div className="text-sm text-center space-y-2">
           <p className="text-blue-100/90">
             Don't have an account?{" "}
-            <a href="/register" className="text-blue-300 hover:text-blue-200">
+            <a href="/auth/register" className="text-blue-300 hover:text-blue-200">
               Sign up
             </a>
           </p>
           <p>
-            <a href="/reset-password" className="text-blue-300 hover:text-blue-200">
+            <a href="/auth/reset-password" className="text-blue-300 hover:text-blue-200">
               Forgot your password?
             </a>
           </p>
