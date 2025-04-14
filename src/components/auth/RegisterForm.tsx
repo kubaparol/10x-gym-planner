@@ -13,19 +13,18 @@ export function RegisterForm() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Registration failed");
+        toast.error(result.error || "Registration failed");
+        return;
       }
 
-      toast.success("Registration successful", {
-        description: "Please check your email to verify your account.",
-      });
-
-      // Redirect to login page after successful registration
-      window.location.href = "/login";
+      // Redirect to success page with email parameter
+      window.location.href = `/auth/register/success?email=${encodeURIComponent(data.email)}`;
     } catch (error) {
-      throw error;
+      toast.error("An unexpected error occurred");
+      console.error(error); // Log error for debugging
     }
   };
 
@@ -59,7 +58,7 @@ export function RegisterForm() {
       footer={
         <p className="text-sm text-blue-100/90">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-300 hover:text-blue-200">
+          <a href="/auth/login" className="text-blue-300 hover:text-blue-200">
             Sign in
           </a>
         </p>

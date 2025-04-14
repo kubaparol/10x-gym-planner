@@ -1,0 +1,54 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const prerender = false;
+
+const email = Astro.url.searchParams.get("email");
+---
+
+<Layout title="Registration Successful - 10x Gym Planner">
+  <div class="min-h-screen">
+    <main class="container max-w-md mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center text-white">
+            <div class="flex items-center justify-center mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 text-green-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            Registration Successful!
+          </CardTitle>
+          <CardDescription className="text-center text-blue-100/90">
+            We've sent a verification link to{" "}
+            {email && <span class="font-medium text-blue-300">{email}</span>}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-center space-y-4">
+          <p class="text-blue-100/90">
+            Please check your email and click the verification link to activate your account. The link will expire in 24
+            hours.
+          </p>
+          <p class="text-blue-100/90 text-sm">If you don't see the email, please check your spam folder.</p>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button asChild variant="secondary">
+            <a href="/auth/login">Return to Login</a>
+          </Button>
+        </CardFooter>
+      </Card>
+    </main>
+  </div>
+</Layout>
