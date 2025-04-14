@@ -56,7 +56,7 @@ export function LoginForm() {
       footer={
         <div className="text-sm text-center space-y-2">
           <p className="text-blue-100/90">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <a href="/auth/register" className="text-blue-300 hover:text-blue-200">
               Sign up
             </a>

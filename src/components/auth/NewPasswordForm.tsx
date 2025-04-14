@@ -8,32 +8,28 @@ interface NewPasswordFormProps {
 
 export function NewPasswordForm({ token }: NewPasswordFormProps) {
   const handleSubmit = async (data: NewPasswordFormData) => {
-    try {
-      const response = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          token,
-        }),
-      });
+    const response = await fetch("/api/auth/reset-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...data,
+        token,
+      }),
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to reset password");
-      }
-
-      toast.success("Password reset successful", {
-        description: "You can now sign in with your new password.",
-      });
-
-      // Redirect to login page after successful password reset
-      window.location.href = "/login";
-    } catch (error) {
-      throw error;
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to reset password");
     }
+
+    toast.success("Password reset successful", {
+      description: "You can now sign in with your new password.",
+    });
+
+    // Redirect to login page after successful password reset
+    window.location.href = "/login";
   };
 
   return (

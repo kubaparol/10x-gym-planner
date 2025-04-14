@@ -1,29 +1,25 @@
 import { z } from "zod";
 
-const passwordSchema = z
-  .string()
-  .min(8, "Password must be at least 8 characters long")
-  .regex(/[0-9]/, "Password must contain at least one number")
-  .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character");
+const passwordSchema = z.string().min(8, "Password must be at least 8 characters");
 
 export const loginFormSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email format"),
-  password: z.string().min(1, "Password is required").min(8, "Password must be at least 8 characters"),
+  email: z.string().email("Invalid email address"),
+  password: passwordSchema,
 });
 
 export const registerFormSchema = z
   .object({
-    email: z.string().email("Please enter a valid email address"),
+    email: z.string().email("Invalid email address"),
     password: passwordSchema,
     confirmPassword: passwordSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "Passwords don't match",
     path: ["confirmPassword"],
   });
 
 export const resetPasswordFormSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Invalid email address"),
 });
 
 export const newPasswordFormSchema = z
@@ -32,7 +28,7 @@ export const newPasswordFormSchema = z
     confirmPassword: passwordSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "Passwords don't match",
     path: ["confirmPassword"],
   });
 

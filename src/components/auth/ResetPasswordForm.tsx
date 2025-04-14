@@ -4,29 +4,25 @@ import { toast } from "sonner";
 
 export function ResetPasswordForm() {
   const handleSubmit = async (data: ResetPasswordFormData) => {
-    try {
-      const response = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+    const response = await fetch("/api/auth/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to send reset password email");
-      }
-
-      toast.success("Reset email sent", {
-        description: "Please check your email for password reset instructions.",
-      });
-
-      // Redirect to login page after successful password reset request
-      window.location.href = "/login";
-    } catch (error) {
-      throw error;
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to send reset password email");
     }
+
+    toast.success("Reset email sent", {
+      description: "Please check your email for password reset instructions.",
+    });
+
+    // Redirect to login page after successful password reset request
+    window.location.href = "/auth/login";
   };
 
   return (

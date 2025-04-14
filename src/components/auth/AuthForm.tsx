@@ -11,22 +11,22 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import type { ZodSchema } from "zod";
 import type { Path } from "react-hook-form";
 
-interface AuthFormProps<T extends Record<string, any>> {
+interface AuthFormProps<T extends Record<string, string>> {
   title: string;
   description: string;
   schema: ZodSchema;
   onSubmit: (data: T) => Promise<void>;
   submitText: string;
-  fields: Array<{
+  fields: {
     name: Path<T>;
     label: string;
     type: string;
     placeholder: string;
-  }>;
+  }[];
   footer?: React.ReactNode;
 }
 
-export function AuthForm<T extends Record<string, any>>({
+export function AuthForm<T extends Record<string, string>>({
   title,
   description,
   schema,

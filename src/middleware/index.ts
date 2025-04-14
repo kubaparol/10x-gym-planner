@@ -12,37 +12,40 @@ const PUBLIC_PATHS = [
   "/api/auth/login",
   "/api/auth/register",
   "/api/auth/reset-password",
+  "/api/auth/logout",
 ];
 
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
-  // Skip auth check for public paths
-  if (PUBLIC_PATHS.includes(url.pathname)) {
-    const supabase = createSupabaseServerInstance({
-      cookies,
-      headers: request.headers,
-    });
-    locals.supabase = supabase;
-    return next();
-  }
-
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: request.headers,
   });
+
+  // Always set supabase client in locals
+  locals.supabase = supabase;
 
   // Get user session
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Handle auth redirects
+  const isAuthPage = url.pathname.startsWith("/auth");
+  const isPublicPath = PUBLIC_PATHS.includes(url.pathname);
+
   if (user) {
+    // Set user in locals
     locals.user = {
       email: user.email ?? null,
       id: user.id,
     };
-    locals.supabase = supabase;
-  } else if (!PUBLIC_PATHS.includes(url.pathname)) {
-    // Redirect to login for protected routes
+
+    // Redirect authenticated users away from auth pages
+    if (isAuthPage && !url.pathname.startsWith("/api/auth")) {
+      return redirect("/dashboard");
+    }
+  } else if (!isPublicPath) {
+    // Redirect unauthenticated users to login from protected routes
     return redirect("/auth/login");
   }
 
