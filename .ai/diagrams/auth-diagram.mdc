@@ -1,0 +1,68 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ # Diagram modułu autentykacji
+
+```mermaid
+flowchart TD
+    %% Frontend Components
+    subgraph Frontend
+        A[Public Layout (Layout_Public.astro)]
+        B[Login Page (/login)]
+        C[Register Page (/register)]
+        D[Reset Password Page (/reset-password)]
+        E[Authorized Layout (Layout.astro)]
+        F[React Dynamic Forms]
+    end
+
+    %% API Endpoints
+    subgraph API
+        G[POST /api/auth/register]
+        H[POST /api/auth/login]
+        I[POST /api/auth/forgot-password]
+        J[POST /api/auth/reset-password]
+    end
+
+    %% Authentication Service
+    subgraph Auth Service
+        K[authService (src/lib/authService.ts)]
+    end
+
+    %% Supabase Integration
+    subgraph Supabase
+        L[Supabase Auth]
+    end
+
+    %% Frontend -> API interactions
+    C -->|Submit registration| G
+    B -->|Submit login| H
+    D -->|Request reset link| I
+    D -->|Submit new password| J
+
+    %% API -> Auth Service
+    G -->|Validate & Process| K
+    H -->|Validate & Process| K
+    I -->|Validate Email| K
+    J -->|Validate Token & Process| K
+
+    %% Auth Service calls Supabase Auth
+    K -->|Call signUp| L
+    K -->|Call signIn| L
+    K -->|Call signOut| L
+    K -->|Call resetPasswordForEmail| L
+
+    %% Supabase response flow
+    L -->|Response| K
+    K -->|API Response| G
+    K -->|API Response| H
+    K -->|API Response| I
+    K -->|API Response| J
+
+    %% Feedback to Frontend (via React components)
+    G -.-> F
+    H -.-> F
+    I -.-> F
+    J -.-> F
+``` 

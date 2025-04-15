@@ -120,6 +120,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
 
 - Jako użytkownik, który zapomniał hasła, chcę zresetować moje hasło, aby móc ponownie zalogować się do aplikacji.
 - Kryteria akceptacji:
+
   - Użytkownik może wprowadzić adres email
   - System wysyła link do resetowania hasła na podany adres
   - Link jest ważny przez 24 godziny
@@ -127,7 +128,22 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - System waliduje złożoność nowego hasła
   - Po pomyślnej zmianie hasła użytkownik może zalogować się przy użyciu nowego hasła
 
-### US-005: Manualne dodawanie planu treningowego
+### US-005: Bezpieczny dostęp i uwierzytelnianie
+
+- Tytuł: Bezpieczny dostęp
+- Opis: Jako użytkownik chcę mieć możliwość rejestracji i logowania się do systemu w sposób zapewniający bezpieczeństwo moich danych.
+- Kryteria akceptacji:
+  - Logowanie i rejestracja odbywają się na dedykowanych stronach.
+  - Logowanie wymaga podania adresu email i hasła.
+  - Rejestracja wymaga podania adresu email, hasła i potwierdzenia hasła.
+  - Użytkownik MOŻE korzystać z tworzenia reguł "ad-hoc" bez logowania się do systemu (US-001).
+  - Użytkownik NIE MOŻE korzystać z funkcji Kolekcji bez logowania się do systemu (US-003).
+  - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
+  - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w głównym @Layout.astro.
+  - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
+  - Odzyskiwanie hasła powinno być możliwe.
+
+### US-006: Manualne dodawanie planu treningowego
 
 - Jako zalogowany użytkownik, chcę manualnie dodać plan treningowy, aby móc z niego korzystać podczas treningów.
 - Kryteria akceptacji:
@@ -143,7 +159,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - Plan jest domyślnie nieaktywny (is_active=false)
   - Po zapisaniu plan jest widoczny na liście planów użytkownika
 
-### US-006: Konwersja planu treningowego z PDF
+### US-007: Konwersja planu treningowego z PDF
 
 - Jako zalogowany użytkownik, chcę zaimportować plan treningowy z pliku PDF, aby zaoszczędzić czas na manualnym wprowadzaniu danych.
 - Kryteria akceptacji:
@@ -158,7 +174,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - Plan jest domyślnie nieaktywny (is_active=false)
   - Po zapisaniu plan jest widoczny na liście planów użytkownika z oznaczeniem źródła jako "pdf_import"
 
-### US-007: Przeglądanie listy planów treningowych
+### US-008: Przeglądanie listy planów treningowych
 
 - Jako zalogowany użytkownik, chcę przeglądać listę moich planów treningowych, aby wybrać ten, z którego chcę skorzystać.
 - Kryteria akceptacji:
@@ -166,7 +182,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - Lista zawiera podstawowe informacje o każdym planie (nazwa, krótki opis)
   - Użytkownik może wybrać plan z listy, aby zobaczyć jego szczegóły
 
-### US-008: Przeglądanie szczegółów planu treningowego
+### US-009: Przeglądanie szczegółów planu treningowego
 
 - Jako zalogowany użytkownik, chcę przeglądać szczegóły wybranego planu treningowego, aby zobaczyć zaplanowane ćwiczenia.
 - Kryteria akceptacji:
@@ -174,7 +190,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - Użytkownik może wybrać konkretny dzień treningowy
   - System wyświetla listę ćwiczeń dla wybranego dnia wraz z detalami (ilość serii, powtórzeń, czas przerwy)
 
-### US-009: Usuwanie planu treningowego
+### US-010: Usuwanie planu treningowego
 
 - Jako zalogowany użytkownik, chcę usunąć plan treningowy, którego już nie potrzebuję.
 - Kryteria akceptacji:
@@ -183,7 +199,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - Po potwierdzeniu plan jest usuwany z listy planów użytkownika
   - System wyświetla komunikat potwierdzający usunięcie planu
 
-### US-010: Rozpoczęcie treningu
+### US-011: Rozpoczęcie treningu
 
 - Jako zalogowany użytkownik, chcę rozpocząć trening według wybranego planu, aby śledzić moje postępy.
 - Kryteria akceptacji:
@@ -192,16 +208,16 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - System prezentuje listę ćwiczeń do wykonania w danym dniu
   - Interfejs jest przystosowany do używania podczas treningu (duże przyciski, czytelne czcionki)
 
-### US-011: Zapisywanie wyników treningu
+### US-012: Zapisywanie wyników treningu
 
-- Jako użytkownik w trakcie treningu, chcę zapisywać wyniki poszczególnych ćwiczeń, aby śledzić moje postępy.
+- Jako zalogowany użytkownik w trakcie treningu, chcę zapisywać wyniki poszczególnych ćwiczeń, aby śledzić moje postępy.
 - Kryteria akceptacji:
   - Dla każdego ćwiczenia użytkownik może wprowadzić używany ciężar dla każdej serii
   - Dla każdego ćwiczenia użytkownik może wprowadzić liczbę wykonanych powtórzeń dla każdej serii
   - System automatycznie zapisuje datę wykonania treningu
   - Użytkownik może oznaczyć trening jako zakończony
 
-### US-012: Przeglądanie historii treningów
+### US-013: Przeglądanie historii treningów
 
 - Jako zalogowany użytkownik, chcę przeglądać historię moich treningów, aby monitorować moje postępy.
 - Kryteria akceptacji:
@@ -210,7 +226,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - System prezentuje dla każdego ćwiczenia używane ciężary i wykonane powtórzenia
   - System wyświetla datę wykonania treningu
 
-### US-013: Wyświetlanie postępów w czasie
+### US-014: Wyświetlanie postępów w czasie
 
 - Jako zalogowany użytkownik, chcę zobaczyć moje postępy treningowe w czasie, aby ocenić efektywność treningu.
 - Kryteria akceptacji:
@@ -218,7 +234,7 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - System prezentuje historię wykonania wybranego ćwiczenia w czasie
   - System pokazuje progres używanych ciężarów i/lub wykonanych powtórzeń w czasie
 
-### US-014: Wyświetlanie "dzisiejszego treningu"
+### US-015: Wyświetlanie "dzisiejszego treningu"
 
 - Jako zalogowany użytkownik, chcę zobaczyć mój dzisiejszy trening na stronie głównej, aby szybko rozpocząć trening.
 - Kryteria akceptacji:
@@ -227,16 +243,16 @@ Poniższe funkcjonalności NIE są częścią MVP:
   - Na stronie głównej system prezentuje szczegóły dzisiejszego treningu
   - Użytkownik może jednym kliknięciem rozpocząć dzisiejszy trening
 
-### US-015: Szybkie wprowadzanie danych treningowych
+### US-016: Szybkie wprowadzanie danych treningowych
 
-- Jako użytkownik w trakcie treningu, chcę szybko wprowadzać dane treningowe, aby nie tracić czasu między seriami.
+- Jako zalogowany użytkownik w trakcie treningu, chcę szybko wprowadzać dane treningowe, aby nie tracić czasu między seriami.
 - Kryteria akceptacji:
   - Interfejs umożliwia szybkie wprowadzanie ciężarów (np. poprzez przyciski +/-, predefiniowane wartości)
   - Interfejs umożliwia szybkie wprowadzanie liczby powtórzeń
   - System automatycznie przechodzi do następnej serii po wprowadzeniu danych
   - System wizualnie oznacza wykonane serie
 
-### US-016: Wylogowanie z aplikacji
+### US-017: Wylogowanie z aplikacji
 
 - Jako zalogowany użytkownik, chcę wylogować się z aplikacji, aby zabezpieczyć moje dane.
 - Kryteria akceptacji:
