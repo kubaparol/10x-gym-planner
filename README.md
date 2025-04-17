@@ -15,6 +15,7 @@ A modern web application that helps users efficiently manage workout plans and t
 ## Tech Stack
 
 ### Frontend
+
 - [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
 - [React](https://react.dev/) v19.0.0 - UI library for building interactive components
 - [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
@@ -22,21 +23,44 @@ A modern web application that helps users efficiently manage workout plans and t
 - [Shadcn/ui](https://ui.shadcn.com/) - Accessible React component library
 
 ### Backend
+
 - [Supabase](https://supabase.com/) - Backend-as-a-Service solution providing:
   - PostgreSQL database
   - Authentication system
   - SDK for multiple languages
 
 ### AI
+
 - [Openrouter.ai](https://openrouter.ai/) - Access to various AI models for PDF conversion
 
 ### Infrastructure
+
 - [GitHub Actions](https://github.com/features/actions) - CI/CD pipelines
 - [DigitalOcean](https://www.digitalocean.com/) - Hosting via Docker
+
+### Testing
+
+- **Unit & Integration Tests**
+
+  - [Vitest](https://vitest.dev/) - Fast unit testing framework compatible with Jest
+  - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) - Testing React components
+  - [Testing Library for Astro](https://testing-library.com/) - Testing Astro components
+  - [MSW](https://mswjs.io/) - Mock Service Worker for API mocking
+
+- **End-to-End Tests**
+
+  - [Playwright](https://playwright.dev/) - Browser automation and E2E testing
+  - Playwright Component Testing - Testing components in real browsers
+
+- **Visual & Accessibility Testing**
+  - [axe-core](https://github.com/dequelabs/axe-core) - Accessibility testing engine
+  - [Percy](https://percy.io/) or [Chromatic](https://www.chromatic.com/) - Visual regression testing
+  - [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) - Performance testing
 
 ## Getting Started Locally
 
 ### Prerequisites
+
 - Node.js v22.14.0 (as specified in `.nvmrc`)
 - npm (comes with Node.js)
 
@@ -79,6 +103,7 @@ npm run build
 ## Project Scope
 
 ### MVP Features
+
 - User account system with profile management
 - Manual workout plan creation
 - PDF to interactive format conversion using AI
@@ -88,6 +113,7 @@ npm run build
 - Mobile-friendly UI optimized for gym use
 
 ### Out of Scope for MVP
+
 - Import formats other than PDF
 - Mobile applications (web-only initially)
 - Social features

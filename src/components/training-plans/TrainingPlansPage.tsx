@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTrainingPlans } from "./hooks/useTrainingPlans";
-import { useNavigate } from "@/lib/hooks/useNavigate";
 import { Pagination } from "@/components/ui/pagination";
 import { TrainingPlansList } from "./TrainingPlansList";
 import { toast } from "sonner";
@@ -17,7 +16,6 @@ import {
 import { Loader2 } from "lucide-react";
 
 export function TrainingPlansPage() {
-  const navigate = useNavigate();
   const { plans, isLoading, error, pagination, setPage, deletePlan, isDeletingPlan } = useTrainingPlans();
   const [planToDelete, setPlanToDelete] = useState<{ id: string; name: string } | null>(null);
 
@@ -44,7 +42,7 @@ export function TrainingPlansPage() {
   }
 
   const handlePlanSelect = (planId: string) => {
-    navigate(`/training-plans/${planId}`);
+    window.location.href = `/training-plans/${planId}`;
   };
 
   const handleDeleteClick = (planId: string) => {
@@ -88,7 +86,7 @@ export function TrainingPlansPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Training Plan</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{planToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{planToDelete?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
