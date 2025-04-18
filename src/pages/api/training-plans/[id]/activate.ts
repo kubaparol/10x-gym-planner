@@ -35,6 +35,7 @@ export const POST: APIRoute = async ({ params, locals }) => {
       );
     }
 
+    // eslint-disable-next-line no-console
     console.error("Error activating training plan:", error);
     return new Response(
       JSON.stringify({

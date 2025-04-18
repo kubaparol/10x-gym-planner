@@ -56,6 +56,7 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error listing training plans:", error);
     return new Response(
       JSON.stringify({
@@ -87,6 +88,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     return new Response(JSON.stringify(result), { status: 201 });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error creating training plan:", error);
     return new Response(
       JSON.stringify({

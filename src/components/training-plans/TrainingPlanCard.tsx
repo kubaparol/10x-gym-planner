@@ -22,10 +22,10 @@ export function TrainingPlanCard({ plan, onClick, onDelete, isDeleting = false }
     <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
       <CardHeader>
         <div className="flex items-start justify-between">
-          <div className="flex-1" onClick={onClick}>
+          <button className="flex-1" onClick={onClick}>
             <CardTitle className="text-xl mb-2">{plan.name}</CardTitle>
             <CardDescription>{plan.description || "No description provided"}</CardDescription>
-          </div>
+          </button>
           <div className="flex items-start gap-2">
             {!plan.is_active && <Badge variant="secondary">Inactive</Badge>}
             <Button

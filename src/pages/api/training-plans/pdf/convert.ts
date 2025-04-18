@@ -24,6 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     return new Response(JSON.stringify({ plan }), { status: 200 });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error converting PDF to training plan:", error);
     return new Response(
       JSON.stringify({
