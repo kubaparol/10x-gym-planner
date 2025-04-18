@@ -46,17 +46,27 @@ jobs:
         run: npm run test:coverage || echo "Tests pass but coverage threshold not met"
         continue-on-error: true
 
-      - name: Generate coverage report
-        run: npm run test:coverage -- --json=coverage-summary.json
+      - name: Get test coverage percentage
+        id: coverage
+        run: |
+          if [ -d "coverage" ]; then
+            COVERAGE_FILE="coverage/coverage-summary.json"
+            if [ -f "$COVERAGE_FILE" ]; then
+              COVERAGE_PCT=$(cat $COVERAGE_FILE | jq -r '.total.lines.pct')
+              echo "value=$COVERAGE_PCT" >> $GITHUB_OUTPUT
+            else
+              echo "value=N/A" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "value=N/A" >> $GITHUB_OUTPUT
+          fi
         continue-on-error: true
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: |
-            coverage/
-            coverage-summary.json
+          path: coverage/
           retention-days: 7
 
   status-comment:
@@ -75,17 +85,6 @@ jobs:
           path: coverage
         continue-on-error: true
 
-      - name: Parse coverage data
-        id: coverage
-        run: |
-          if [ -f coverage/coverage-summary.json ]; then
-            COVERAGE_PCT=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
-          else
-            COVERAGE_PCT="N/A"
-          fi
-          echo "value=$COVERAGE_PCT" >> $GITHUB_OUTPUT
-        continue-on-error: true
-
       - name: Get job statuses
         id: status
         run: |
@@ -98,7 +97,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const coveragePct = "${{ steps.coverage.outputs.value || 'N/A' }}";
+            const coveragePct = "${{ needs.test.outputs.coverage_pct || 'N/A' }}";
             const lintStatus = "${{ steps.status.outputs.lint }}";
             const testStatus = "${{ steps.status.outputs.test }}";
 
