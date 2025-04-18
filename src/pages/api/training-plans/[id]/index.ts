@@ -39,6 +39,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error getting training plan details:", error);
 
     // Handle specific error cases
@@ -115,6 +116,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
       { status: 200 }
     );
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error deleting training plan:", error);
 
     // Handle specific error cases

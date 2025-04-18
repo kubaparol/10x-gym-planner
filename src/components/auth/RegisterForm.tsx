@@ -22,9 +22,8 @@ export function RegisterForm() {
 
       // Redirect to success page with email parameter
       window.location.href = `/auth/register/success?email=${encodeURIComponent(data.email)}`;
-    } catch (error) {
+    } catch {
       toast.error("An unexpected error occurred");
-      console.error(error); // Log error for debugging
     }
   };
 

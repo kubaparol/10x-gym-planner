@@ -26,9 +26,8 @@ export function LoginForm() {
 
       // Redirect to dashboard after successful login
       window.location.href = "/dashboard";
-    } catch (error) {
+    } catch {
       toast.error("An unexpected error occurred");
-      console.error(error); // Log error for debugging
     }
   };
 
